@@ -9,6 +9,13 @@ Yeni sürümde [11 ek yetenek](docs/features.md) bulunur: medya, sekmeler, rutin
 Qt paneli, durdurma ve çıkış sesi. `/features` listeyi, `/panel` kontrol panelini açar.
 Türkçe desteği kullanıcı isteğiyle ertelendi. [Uygulama planı](docs/capability-plan.md).
 
+## Çalıştırma sınırları
+
+- **Masaüstü kontrolü Linux, KDE ve Wayland ortamı gerektirir.** Windows/macOS bu sürümde desteklenmez.
+- Ses modu için whisper.cpp, İngilizce ses modeli ve sistem ses araçları ayrıca kurulmalıdır. `.local/` içindeki araçlar, model dosyaları ve sanal ortamlar depoya dahil değildir.
+- İsteğe bağlı Laya sağlayıcısı ayrı Python ortamı ve indirilmiş model gerektirir. GPU modu için uyumlu NVIDIA/CUDA ve CUDA destekli PyTorch gerekir; kullanılamazsa otomatik olarak CPU'ya geçmez.
+- Kurulum ayrıntıları [Yeni bilgisayarda gereksinimler](#yeni-bilgisayarda-gereksinimler) ve [Laya rehberinde](docs/laya.md) bulunur. Birim testleri ve yol kontrolleri, her masaüstü görevinin başarılı olacağını garanti etmez.
+
 ## Kullanım
 
 ```sh
