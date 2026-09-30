@@ -4,6 +4,7 @@ import os
 import select
 import subprocess
 import time
+from pathlib import Path
 
 from .client import AgentError
 from .config import ROOT
@@ -44,13 +45,19 @@ class LayaClient:
     def start(self):
         if self.process and self.process.poll() is None:
             return
-        python = ROOT / '.local/laya/venv/bin/python'
-        model = ROOT / '.local/laya/model'
+        python = Path(os.environ.get('LAYA_PYTHON', str(ROOT / '.local/laya/venv/bin/python'))).expanduser()
+        if not python.is_absolute():
+            python = ROOT / python
+        model = Path(os.environ.get('LAYA_MODEL_DIR', str(ROOT / '.local/laya/model'))).expanduser()
+        if not model.is_absolute():
+            model = ROOT / model
         if not python.exists() or not (model/'model.safetensors').exists():
             raise AgentError('LAYA_NOT_INSTALLED')
         env = dict(os.environ, HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1',
                    HF_HOME=str(ROOT/'.local/laya/hf-cache'), TOKENIZERS_PARALLELISM='false')
-        gpu_packages=ROOT/'.local/laya/gpu-packages'
+        gpu_packages=Path(os.environ.get('LAYA_GPU_PACKAGES', str(ROOT/'.local/laya/gpu-packages'))).expanduser()
+        if not gpu_packages.is_absolute():
+            gpu_packages = ROOT / gpu_packages
         if self.device=='cuda' and (gpu_packages/'torch').exists():
             # Reuse only linked GPU runtime packages; keep Laya's other dependencies isolated.
             env['PYTHONPATH']=str(gpu_packages)

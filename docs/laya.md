@@ -5,8 +5,8 @@ Laya seçildikten sonra model yüklenir, yerel kontrol çalışır ve başarıl�
 Ctrl+Alt+V bas-konuş başlar. Laya anahtar istemez, OpenCode anahtarını okumaz.
 Laya seçilince aygıt sorulur: `1` CPU, `2` NVIDIA GPU. CUDA destekli PyTorch
 kurulu değilse GPU açık hata verir; CPU'ya sessiz geçiş yapılmaz. GPU bağımlılığı
-kurulumu kullanıcı indirme onayına bağlıdır. Mevcut kurulu GPU paketleri bulundu
-ve yeniden kullanıldı; CPU ve GPU hazırdır, yeni indirme yapılmadı.
+kurulumu ayrı yapılır. Model ve sanal ortam Git deposuna dahil değildir;
+yeni klonda hazır olduğu varsayılmaz.
 Metin modu: `./desktop-agent --provider laya`.
 Ses modu: `./desktop-agent listen --provider laya`.
 Doğrudan aygıt seçimi: `./desktop-agent listen --provider laya --device cpu`
@@ -15,12 +15,22 @@ veya `--device cuda`.
 Kurulum proje içindedir: `.local/laya/venv`, `.local/laya/model` ve
 `.local/laya/install.json`. İngilizce checkpoint `convaiinnovations/laya`,
 revision `55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851`; Laya 0.3.21 ve PyTorch CPU.
-CPU PyTorch 2.14.0 yerel ortamda kalır. GPU seçeneği kurulu
-`/home/ykk/PROJE/tetris_RLAgent/.venv/lib/python3.14/site-packages` içindeki
-PyTorch 2.12.0+cu130, NVIDIA ve Triton paketlerini salt okunur bağlantılarla
-`.local/laya/gpu-packages` üzerinden kullanır. Diğer Laya bağımlılıkları kendi
-ortamından yüklenir; Tetris ortamı değiştirilmez. Kaynak ortam silinir/taşınırsa
-GPU bağlantısı bozulur; CPU çalışmaya devam eder. Kaynak kaydı `gpu-reuse.json`.
+GPU için başka bir projenin sanal ortamı gerekmez. Kendi Laya ortamınızı kullanın;
+CUDA kurulum yardımcısı `packaging/install-laya-gpu.sh` içindedir.
+`LAYA_PYTHON` ile Laya kurulu Python yolunu, `LAYA_MODEL_DIR` ile indirilmiş model
+klasörünü, isteğe bağlı `LAYA_GPU_PACKAGES` ile ayrı GPU paket klasörünü seçebilirsiniz.
+Göreli yollar proje köküne göre çözülür, `~` kullanıcı ev dizinidir.
+
+Örnek bağımsız kurulum (ağdan paket ve model indirir):
+
+```sh
+python3 -m venv .local/laya/venv
+.local/laya/venv/bin/python -m pip install -r packaging/laya-requirements.lock
+.local/laya/venv/bin/python -c "from huggingface_hub import snapshot_download; snapshot_download('convaiinnovations/laya', revision='55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851', local_dir='.local/laya/model')"
+```
+
+Python/PyTorch sürümleri platformunuzla uyumlu olmalıdır. GPU için CUDA destekli
+PyTorch gerekir; desteklenmeyen platformlarda kurulumu ayrıca uyarlayın.
 Bağımlılık sürümleri `packaging/laya-requirements.lock` içindedir. Diğer dil ve
 typed-decisions modelleri indirilmedi. Ortam ana masaüstü Python'undan ayrıdır;
 model yalnızca Laya seçilince ayrı işçi süreçte yüklenir, çıkışta süreç kapanır.

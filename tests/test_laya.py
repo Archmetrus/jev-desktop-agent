@@ -1,5 +1,8 @@
 import io
 import unittest
+import os
+import tempfile
+from pathlib import Path
 from contextlib import redirect_stdout
 from unittest.mock import Mock, patch
 
@@ -12,6 +15,29 @@ from desktop_agent.client import JevClient
 
 
 class LayaTests(unittest.TestCase):
+    def test_model_paths_use_project_root_and_current_user_home(self):
+        with tempfile.TemporaryDirectory(prefix='laya portability ') as directory:
+            root = Path(directory)
+            python = root/'runtime/python'
+            python.parent.mkdir()
+            python.touch()
+            model = root/'user-home/models'
+            model.mkdir(parents=True)
+            (model/'model.safetensors').touch()
+            gpu = root/'gpu packages'
+            (gpu/'torch').mkdir(parents=True)
+            env = {'HOME': str(root/'user-home'), 'LAYA_PYTHON': 'runtime/python',
+                   'LAYA_MODEL_DIR': '~/models', 'LAYA_GPU_PACKAGES': 'gpu packages'}
+            client = LayaClient(device='cuda')
+            with patch.dict(os.environ, env), patch('desktop_agent.laya_client.ROOT', root), \
+                    patch('desktop_agent.laya_client.subprocess.Popen') as spawn, \
+                    patch.object(client, 'read', return_value={'ready': True, 'device': 'cuda'}):
+                client.start()
+            self.assertEqual(spawn.call_args.args[0][0], str(python))
+            self.assertEqual(spawn.call_args.args[0][2], str(model))
+            self.assertEqual(spawn.call_args.kwargs['cwd'], root)
+            self.assertEqual(spawn.call_args.kwargs['env']['PYTHONPATH'], str(gpu))
+
     def test_budget_only_counts_explicit_steps_outside_payload_quotes(self):
         self.assertEqual(action_budget('Scroll down'),1)
         self.assertEqual(action_budget('Press Tab'),1)

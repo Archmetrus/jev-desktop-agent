@@ -54,12 +54,12 @@ API anahtarları bu dosyaya kaydedilmez.
 ## 5. Dosyalar
 
 ```text
-Open file "/home/ykk/Documents/report.pdf"
-Find files "report" in "/home/ykk/Documents"
-Create folder "/home/ykk/Documents/new folder"
-Rename file "/home/ykk/Documents/report.pdf" to "report-v2.pdf"
-Move file "/home/ykk/Documents/report-v2.pdf" to "/home/ykk/Downloads/report-v2.pdf"
-Trash file "/home/ykk/Downloads/report-v2.pdf"
+Open file "~/Documents/report.pdf"
+Find files "report" in "~/Documents"
+Create folder "~/Documents/new folder"
+Rename file "~/Documents/report.pdf" to "report-v2.pdf"
+Move file "~/Documents/report-v2.pdf" to "~/Downloads/report-v2.pdf"
+Trash file "~/Downloads/report-v2.pdf"
 ```
 
 Boşluk içeren yolları çift tırnak içinde yazın. Varsayılan kökler proje klasörü,

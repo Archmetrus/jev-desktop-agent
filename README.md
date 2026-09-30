@@ -12,7 +12,7 @@ Türkçe desteği kullanıcı isteğiyle ertelendi. [Uygulama planı](docs/capab
 ## Kullanım
 
 ```sh
-cd /home/ykk/jev-test
+cd "$(git rev-parse --show-toplevel)"
 ./desktop-agent listen
 ```
 
@@ -87,8 +87,8 @@ ve odağı ayrıca doğrulanır. Başarısız seçimler hata koduyla görünür,
 
 ## Kurulum ve kontroller
 
-Kullanıcı onayıyla whisper.cpp v1.9.4 ve İngilizce base.en modeli `.local/` dizinine kuruldu;
-model SHA-256 değeri resmî kayıtla doğrulandı. Eksik paket/model otomatik indirilmez.
+Geliştirme ortamında whisper.cpp v1.9.4 ve İngilizce base.en modeli kullanıldı.
+Yeni klonda `.local/` ses araçları ve model bulunmaz; aşağıdaki gereksinimleri hazırlayın. Eksik paket/model otomatik indirilmez.
 Sistem Python'u, GI/dbus, PySide6, PipeWire, FFmpeg ve Firefox kullanılır. KDE/Wayland gerekir.
 
 ```sh
@@ -197,3 +197,17 @@ Sürüm 2026-09-29.12: 11 yetenek genişletmesi eklendi. Tanımlı komutlar mode
 çağrısı yapmadan çalışır. Dosya taşıma atomik ve üzerine yazmadan uygulanır.
 Geri alma çakışmayı denetler. Bas-konuşta Ctrl+Alt+X, panelde Durdur kullanılır;
 iptal edilen model yanıtı sonraki masaüstü adımına dönüşmez.
+
+## Proje dizini
+
+Depoyu istediğiniz klasöre klonlayıp o dizine girin. `git rev-parse --show-toplevel` kullanılan komutlar klonun içinden çalıştırılır; kullanıcı adı veya sabit bir ana dizin gerekmez.
+
+## Linux masaüstü kısayolu
+
+Kısayolu `python3 packaging/install-desktop.py` ile kurun. Kurucu proje konumunu çözüp `$XDG_DATA_HOME/applications` (varsayılan `~/.local/share/applications`) içine yazar. `.desktop` dosyası şablondur; doğrudan kopyalamayın. Projeyi taşırsanız kurucuyu yeniden çalıştırın.
+
+## Yeni bilgisayarda gereksinimler
+
+Bu masaüstü ajanı Linux/KDE ortamı içindir. Python, PyGObject/GTK AT-SPI, Qt, DBus/Secret Service, Konsole, FFmpeg ve kullanılan masaüstü araçlarını dağıtımınızın paket yöneticisiyle kurun. Desteklenen uygulama komutlarını `config/apps.json` içinde bilgisayarınıza göre ayarlayın.
+
+`.local` içindeki modeller ve sanal ortamlar depoya dahil değildir. Ses modu için `config/config.json` içindeki `speech.binary` ve `speech.model` yollarına whisper.cpp çalıştırılabilir dosyası ve İngilizce model yerleştirin; göreli yollar proje köküne göre çözülür. İsteğe bağlı Laya kurulumu [docs/laya.md](docs/laya.md) içindedir. Windows/macOS masaüstü kontrolü bu sürümde desteklenmez.

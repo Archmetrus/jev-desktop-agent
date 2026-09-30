@@ -20,7 +20,7 @@ OpenRouter anahtarı bu sağlayıcıya taşınmaz. Başka modele otomatik geçi�
 ## İlk gerçek API testi
 
 ```sh
-cd /home/ykk/jev-test
+cd "$(git rev-parse --show-toplevel)"
 ./desktop-agent --provider opencode
 ```
 
