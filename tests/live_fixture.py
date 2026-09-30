@@ -1,0 +1,31 @@
+"""Isolated native fixture for manual KDE/Wayland integration checks."""
+from PySide6.QtGui import QKeySequence, QShortcut
+from PySide6.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QScrollArea, QVBoxLayout, QWidget
+
+app = QApplication([])
+app.setApplicationName("JevToolFixture")
+app.setDesktopFileName("jevtoolfixture")
+window = QWidget()
+window.setWindowTitle("Jev tool test")
+window.resize(500, 500)
+layout = QVBoxLayout(window)
+field = QLineEdit()
+field.setAccessibleName("Test text")
+button = QPushButton("Apply")
+status = QLabel("Ready")
+button.clicked.connect(lambda: status.setText("Applied: " + field.text()))
+layout.addWidget(field)
+layout.addWidget(button)
+layout.addWidget(status)
+shortcut = QShortcut(QKeySequence("Ctrl+T"), window)
+shortcut.activated.connect(lambda: status.setText("Shortcut received"))
+scroll = QScrollArea()
+content = QWidget()
+rows = QVBoxLayout(content)
+for i in range(50):
+    rows.addWidget(QLabel("Row " + str(i)))
+scroll.setWidget(content)
+scroll.setWidgetResizable(True)
+layout.addWidget(scroll)
+window.show()
+app.exec()

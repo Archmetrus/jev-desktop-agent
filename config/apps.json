@@ -1,0 +1,6 @@
+{
+  "firefox": {"command": ["firefox"], "aliases": ["browser"], "window_class": "firefox"},
+  "chrome": {"command": ["google-chrome-stable"], "aliases": ["google chrome"], "window_class": "google-chrome"},
+  "konsole": {"command": ["konsole"], "aliases": ["terminal"], "window_class": "org.kde.konsole"},
+  "dolphin": {"command": ["dolphin"], "aliases": ["files", "file manager"], "window_class": "org.kde.dolphin"}
+}

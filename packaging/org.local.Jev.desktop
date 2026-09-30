@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Jev
+Comment=Basılı tutarak sesli masaüstü kontrolü
+Exec=konsole --workdir /home/ykk/jev-test -e /home/ykk/jev-test/desktop-agent listen --choose-provider
+Icon=audio-input-microphone
+Terminal=false
+StartupNotify=false
+Categories=Utility;
+X-KDE-Shortcuts=Ctrl+Alt+J

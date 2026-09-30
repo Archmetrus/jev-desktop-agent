@@ -1,0 +1,5 @@
+{
+  "youtube": {"url": "https://www.youtube.com", "search": "https://www.youtube.com/results?search_query={query}"},
+  "google": {"url": "https://www.google.com", "search": "https://www.google.com/search?q={query}"},
+  "wikipedia": {"url": "https://en.wikipedia.org", "search": "https://en.wikipedia.org/w/index.php?search={query}"}
+}
